@@ -16,7 +16,7 @@ export class NavbarComponent {
 
   isAuthenticated$ = this.authService.isAuthenticated$;
 
-  currentUser = computed(() => this.authService.getCurrentUser());
+  currentUser = computed(() => this.authService.currentUser());
 
   onLogout(): void {
     this.authService.logout();

@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { TokenService } from './token.service';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment.development';
@@ -29,6 +29,10 @@ export class AuthService {
           email: response.email,
           role: response.role
         });
+        this.currentUserSignal.set({
+          email: response.email,
+          role: response.role
+        });
         this.isAuthenticatedSubject.next(true);
       })
     );
@@ -42,6 +46,10 @@ export class AuthService {
           email: response.email,
           role: response.role
         });
+        this.currentUserSignal.set({
+          email: response.email,
+          role: response.role
+        });
         this.isAuthenticatedSubject.next(true);
       })
     );
@@ -49,6 +57,7 @@ export class AuthService {
 
   logout(): void {
     this.tokenService.clearStorage();
+    this.currentUserSignal.set(null);
     this.isAuthenticatedSubject.next(false);
     this.router.navigate(['/login']);
   }
@@ -57,7 +66,10 @@ export class AuthService {
     return this.tokenService.isTokenValid();
   }
 
-  getCurrentUser(): { email: string; role: string } | null {
-    return this.tokenService.getUser();
-  }
+  private currentUserSignal = signal<{ email: string; role: string } | null>(
+    this.tokenService.getUser()
+  );
+
+  currentUser = this.currentUserSignal.asReadonly();
+
 }
