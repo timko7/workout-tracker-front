@@ -1,0 +1,119 @@
+<div class="progress-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>Napredak</h1>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <form [formGroup]="progressForm" class="filter-form">
+      <div class="form-group">
+        <label for="month">Mesec</label>
+        <select 
+          id="month" 
+          formControlName="month" 
+          class="form-control"
+          (change)="onFilterChange()">
+          @for (month of months; track month.value) {
+            <option [value]="month.value">{{ month.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="year">Godina</label>
+        <select 
+          id="year" 
+          formControlName="year" 
+          class="form-control"
+          (change)="onFilterChange()">
+          @for (year of years(); track year) {
+            <option [value]="year">{{ year }}</option>
+          }
+        </select>
+      </div>
+    </form>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+    <div class="loading">
+      <p>Učitavanje podataka...</p>
+    </div>
+  }
+
+  <!-- Error Message -->
+  @if (errorMessage()) {
+    <div class="alert-error">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  <!-- Progress Data -->
+  @if (!isLoading() && !errorMessage()) {
+    @if (hasData()) {
+      <div class="progress-content">
+        <h2 class="month-title">
+          {{ getSelectedMonthLabel() }} {{ progressForm.get('year')?.value }}
+        </h2>
+
+        <div class="weeks-grid">
+          @for (week of weeklyProgress(); track week.weekNumber) {
+            <div class="week-card">
+              <div class="week-header">
+                <h3>Nedelja {{ week.weekNumber }}</h3>
+              </div>
+
+              <div class="week-stats">
+                <div class="stat-item">
+                  <div class="stat-icon">⏱️</div>
+                  <div class="stat-content">
+                    <span class="stat-label">Ukupno trajanje</span>
+                    <span class="stat-value">{{ week.totalDuration }} min</span>
+                  </div>
+                </div>
+
+                <div class="stat-item">
+                  <div class="stat-icon">💪</div>
+                  <div class="stat-content">
+                    <span class="stat-label">Broj treninga</span>
+                    <span class="stat-value">{{ week.workoutCount }}</span>
+                  </div>
+                </div>
+
+                <div class="stat-item">
+                  <div class="stat-icon">🔥</div>
+                  <div class="stat-content">
+                    <span class="stat-label">Prosečan intenzitet</span>
+                    <span 
+                      class="stat-value" 
+                      [ngClass]="getIntensityClass(week.averageIntensity)">
+                      {{ formatNumber(week.averageIntensity) }}/10
+                    </span>
+                  </div>
+                </div>
+
+                <div class="stat-item">
+                  <div class="stat-icon">😴</div>
+                  <div class="stat-content">
+                    <span class="stat-label">Prosečan umor</span>
+                    <span 
+                      class="stat-value" 
+                      [ngClass]="getFatigueClass(week.averageFatigue)">
+                      {{ formatNumber(week.averageFatigue) }}/10
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="empty-state">
+        <p>Nema podataka za odabrani mesec.</p>
+        <p class="empty-hint">Dodajte treninge da biste videli napredak.</p>
+      </div>
+    }
+  }
+</div>

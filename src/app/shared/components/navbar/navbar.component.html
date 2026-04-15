@@ -1,0 +1,41 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <h1>💪 Workout Tracker</h1>
+    </div>
+
+    @if (isAuthenticated$ | async) {
+      <div class="navbar-menu">
+        <button 
+          class="nav-link" 
+          routerLink="/workouts" 
+          routerLinkActive="active">
+          Treninzi
+        </button>
+        <button 
+          class="nav-link" 
+          routerLink="/progress" 
+          routerLinkActive="active">
+          Napredak
+        </button>
+      </div>
+    }
+    
+
+    <div class="navbar-actions">
+      @if (isAuthenticated$ | async) {
+        <span class="user-email">{{ currentUser()?.email }}</span>
+        <button class="btn-logout" (click)="onLogout()">
+          Odjavi se
+        </button>
+      } @else {
+        <button class="btn-login" routerLink="/login">
+          Prijavi se
+        </button>
+        <button class="btn-register" routerLink="/register">
+          Registruj se
+        </button>
+      }
+    </div>
+  </div>
+</nav>

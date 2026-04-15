@@ -1,0 +1,142 @@
+<div class="workout-form-container">
+  <h2>{{ formTitle }}</h2>
+
+  <form [formGroup]="workoutForm" (ngSubmit)="onSubmit()">
+    <!-- Exercise Type -->
+    <div class="form-group">
+      <label for="exerciseType">Tip vežbe</label>
+      <select id="exerciseType" formControlName="exerciseType" class="form-control">
+        @for (type of exerciseTypes; track type.value) {
+          <option [value]=type.value>{{ type.label }}</option>
+        }
+      </select>
+    </div>
+
+    <!-- Duration and Calories Row -->
+    <div class="form-row">
+      <div class="form-group">
+        <label for="duration">Trajanje (min)</label>
+        <input
+          type="number"
+          id="duration"
+          formControlName="durationInMinutes"
+          class="form-control"
+          min="1"
+          placeholder="30"
+        />
+        @if (workoutForm.get('durationInMinutes')?.invalid && workoutForm.get('durationInMinutes')?.touched) {
+          <div class="error-message">
+            <span>Trajanje je obavezno</span>
+          </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="calories">Kalorije (kcal)</label>
+        <input
+          type="number"
+          id="calories"
+          formControlName="caloriesBurned"
+          class="form-control"
+          min="0"
+          placeholder="200"
+        />
+        @if (workoutForm.get('caloriesBurned')?.invalid && workoutForm.get('caloriesBurned')?.touched) {
+          <div class="error-message">
+            <span>Kalorije su obavezne</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Intensity -->
+    <div class="form-group">
+      <label for="intensity">
+        Intenzitet: {{ workoutForm.get('intensity')?.value }}/10
+        <span class="intensity-label">{{ getIntensityLabel(workoutForm.get('intensity')?.value) }}</span>
+      </label>
+      <input
+        type="range"
+        id="intensity"
+        formControlName="intensity"
+        class="range-slider"
+        min="1"
+        max="10"
+      />
+      <div class="range-labels">
+        <span>1 (Lak)</span>
+        <span>10 (Težak)</span>
+      </div>
+    </div>
+
+    <!-- Fatigue -->
+    <div class="form-group">
+      <label for="fatigue">
+        Umor: {{ workoutForm.get('fatigue')?.value }}/10
+        <span class="fatigue-label">{{ getFatigueLabel(workoutForm.get('fatigue')?.value) }}</span>
+      </label>
+      <input
+        type="range"
+        id="fatigue"
+        formControlName="fatigue"
+        class="range-slider"
+        min="1"
+        max="10"
+      />
+      <div class="range-labels">
+        <span>1 (Malo)</span>
+        <span>10 (Vrlo umoran)</span>
+      </div>
+    </div>
+
+    <!-- Date and Time -->
+    <div class="form-group">
+      <label for="date">Datum i vreme</label>
+      <input
+        type="datetime-local"
+        id="date"
+        formControlName="date"
+        class="form-control"
+      />
+      @if (workoutForm.get('date')?.invalid && workoutForm.get('date')?.touched) {
+        <div class="error-message">
+          <span>Datum je obavezan</span>
+        </div>
+      }
+    </div>
+
+    <!-- Notes -->
+    <div class="form-group">
+      <label for="notes">Beleške (opciono)</label>
+      <textarea
+        id="notes"
+        formControlName="notes"
+        class="form-control"
+        rows="4"
+        placeholder="Dodajte beleške o treningu..."
+      ></textarea>
+    </div>
+
+    <!-- Error Message -->
+    @if (errorMessage()) {
+      <div class="alert-error">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <!-- Action Buttons -->
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()" [disabled]="isLoading()">
+        Otkaži
+      </button>
+      <button type="submit" class="btn-submit" [disabled]="isLoading()">
+        
+        @if (isLoading()) {
+          <span>Čuvanje...</span>
+        } @else {
+          <span>{{ 'Dodaj trening' }}</span>
+        }
+      </button>
+    </div>
+  </form>
+</div>

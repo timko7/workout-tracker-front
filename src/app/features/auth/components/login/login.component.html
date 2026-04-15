@@ -1,0 +1,77 @@
+<div class="login-container">
+  <div class="login-card">
+    <h2>Prijavi se</h2>
+    <p class="subtitle">Unesite svoje podatke za pristup</p>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="primer@email.com"
+          [class.error]="email?.invalid && email?.touched"
+        />
+        @if (email?.invalid && email?.touched) {
+          <div class="error-message">
+            @if (email?.errors?.['required']) {
+              <span>Email je obavezan</span>
+            }
+            @if (email?.errors?.['email']) {
+              <span>Unesite validan email</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Lozinka</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="••••••••"
+          [class.error]="password?.invalid && password?.touched"
+        />
+        @if (password?.invalid && password?.touched) {
+          <div class="error-message">
+            @if (password?.errors?.['required']) {
+              <span>Lozinka je obavezna</span>
+            }
+            @if (password?.errors?.['minlength']) {
+              <span>Lozinka mora imati najmanje 6 karaktera</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Error Message -->
+      @if (errorMessage()) {
+        <div class="alert-error">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        class="btn-submit" 
+        [disabled]="isLoading()">
+        @if (!isLoading()) {
+          <span>Prijavi se</span>
+        } @else {
+          <span>Prijavljivanje...</span>
+        }
+      </button>
+
+      <!-- Register Link -->
+      <div class="register-link">
+        Nemate nalog? 
+        <a routerLink="/register">Registrujte se ovde</a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="workout-list-container">
+  <!-- Header -->
+  <div class="header">
+    <h1>Moji Treninzi</h1>
+    <button class="btn-add" (click)="openAddForm()">
+      + Dodaj Trening
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  @if (isLoading()) {
+  <div class="loading">
+    <p>Učitavanje treninga...</p>
+  </div>
+  }
+
+  <!-- Error Message -->
+  @if (errorMessage()) {
+  <div class="alert-error">
+    {{ errorMessage() }}
+  </div>
+  }
+
+  <!-- Workouts Grid -->
+  @if (!isLoading() && !errorMessage()) {
+  <div class="workouts-grid">
+    @for (workout of workouts(); track workout) {
+    <div class="workout-card">
+      <!-- Card Header -->
+      <div class="card-header">
+        <span class="exercise-type">{{ getExerciseTypeLabel(workout.exerciseType) }}</span>
+        <span class="workout-date">{{ formatDate(workout.workoutDate) }}</span>
+      </div>
+
+      <!-- Card Body -->
+      <div class="card-body">
+        <div class="stat">
+          <span class="stat-label">Trajanje:</span>
+          <span class="stat-value">{{ workout.durationInMinutes }} min</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Kalorije:</span>
+          <span class="stat-value">{{ workout.caloriesBurned }} kcal</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Intenzitet:</span>
+          <span class="stat-value" [ngClass]="getIntensityClass(workout.intensity)">
+            {{ workout.intensity }}/10
+          </span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Umor:</span>
+          <span class="stat-value" [ngClass]="getFatigueClass(workout.fatigue)">
+            {{ workout.fatigue }}/10
+          </span>
+        </div>
+      </div>
+
+      <!-- Card Footer (Notes) -->
+      @if (workout.notes) {
+      <div class="card-footer">
+        <p class="notes">{{ workout.notes }}</p>
+      </div>
+      }
+    </div>
+    } @empty {
+    <!-- Empty State -->
+    <div class="empty-state">
+      <p>Nema treninga za prikaz.</p>
+      <button class="btn-add-empty" (click)="openAddForm()">
+        Dodaj prvi trening
+      </button>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Workout Form Modal  -->
+  @if (showForm()) {
+  <div class="modal-overlay" (click)="closeForm()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="modal-close" (click)="closeForm()">&times;</button>
+      <app-workout-form 
+        (workoutSaved)="onWorkoutSaved()" 
+        (cancelled)="closeForm()">
+      </app-workout-form>
+    </div>
+  </div>
+  }
+</div>

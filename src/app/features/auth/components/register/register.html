@@ -1,0 +1,145 @@
+<div class="register-container">
+  <div class="register-card">
+    <h2>Kreiraj nalog</h2>
+    <p class="subtitle">Popunite informacije da biste se registrovali</p>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <!-- First Name Field -->
+      <div class="form-group">
+        <label for="firstName">Ime</label>
+        <input
+          type="text"
+          id="firstName"
+          formControlName="firstName"
+          placeholder="Marko"
+          [class.error]="firstName?.invalid && firstName?.touched"
+        />
+        @if (firstName?.invalid && firstName?.touched) {
+          <div class="error-message">
+            @if (firstName?.errors?.['required']) {
+              <span>Ime je obavezno</span>
+            }
+            @if (firstName?.errors?.['minlength']) {
+              <span>Ime mora imati najmanje 2 karaktera</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Last Name Field -->
+      <div class="form-group">
+        <label for="lastName">Prezime</label>
+        <input
+          type="text"
+          id="lastName"
+          formControlName="lastName"
+          placeholder="Petrović"
+          [class.error]="lastName?.invalid && lastName?.touched"
+        />
+        @if (lastName?.invalid && lastName?.touched) {
+          <div class="error-message">
+            @if (lastName?.errors?.['required']) {
+              <span>Prezime je obavezno</span>
+            }
+            @if (lastName?.errors?.['minlength']) {
+              <span>Prezime mora imati najmanje 2 karaktera</span>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Email Field -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="primer@email.com"
+          [class.error]="email?.invalid && email?.touched"
+        />
+          @if (email?.invalid && email?.touched) {
+            <div class="error-message">
+              @if (email?.errors?.['required']) {
+                <span>Email je obavezan</span>
+              }
+              @if (email?.errors?.['email']) {
+                <span>Unesite validan email</span>
+              }
+            </div>
+          }
+      </div>
+
+      <!-- Password Field -->
+      <div class="form-group">
+        <label for="password">Lozinka</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          placeholder="••••••••"
+          [class.error]="password?.invalid && password?.touched"
+        />
+          @if (password?.invalid && password?.touched) {
+            <div class="error-message">
+              @if (password?.errors?.['required']) {
+                <span>Lozinka je obavezna</span>
+              }
+              @if (password?.errors?.['minlength']) {
+                <span>Lozinka mora imati najmanje 8 karaktera</span>
+              }
+            </div>
+          }
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div class="form-group">
+        <label for="confirmPassword">Potvrdi lozinku</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          placeholder="••••••••"
+          [class.error]="(confirmPassword?.invalid && confirmPassword?.touched) || (!passwordsMatch && confirmPassword?.touched)"
+        />
+        @if (confirmPassword?.invalid && confirmPassword?.touched) {
+          <div class="error-message">
+              @if (confirmPassword?.errors?.['required']) {
+                <span>Potvrdite lozinku</span>
+              }
+          </div>
+        }
+        @if (!passwordsMatch && confirmPassword?.touched && confirmPassword?.value) {
+          <div class="error-message">
+            <span>Lozinke se ne poklapaju</span>
+          </div>
+        }
+      </div>
+
+      <!-- Error Message -->
+      @if (errorMessage()) {
+        <div class="alert-error">
+          {{ errorMessage() }}
+        </div>
+      }
+
+      <!-- Submit Button -->
+      <button 
+        type="submit" 
+        class="btn-submit" 
+        [disabled]="isLoading()">
+        @if (!isLoading()) {
+          <span>Registruj se</span>
+        } @else {
+          <span>Registracija...</span>
+        }
+      </button>
+
+      <!-- Login Link -->
+      <div class="login-link">
+        Već imate nalog? 
+        <a routerLink="/login">Prijavite se ovde</a>
+      </div>
+    </form>
+  </div>
+</div>
