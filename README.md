@@ -2,57 +2,52 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.7.
 
-## Development server
+Angular aplikacija za praćenje treninga sa .NET backend-om.
 
-To start a local development server, run:
+## Instalacija
 
+### Preduslovi
+- Node.js (v18+)
+- Angular CLI (`npm install -g @angular/cli`)
+
+### Setup
+
+1. **Clone repository:**
 ```bash
-ng serve
+   git clone https://github.com/TVOJ_USERNAME/workout-tracker-front.git
+   cd workout-tracker-front
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
+2. **Instaliraj dependencies:**
 ```bash
-ng generate component component-name
+   npm install
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
+3. **Kopiraj i konfiguriši environment fajl:**
 ```bash
-ng generate --help
+   cp src/environments/environment.example.ts src/environments/environment.development.ts
 ```
+   Ažuriraj `apiUrl` sa tvojim backend URL-om.
 
-## Building
-
-To build the project run:
-
+4. **Pokreni aplikaciju:**
 ```bash
-ng build
+   ng serve
 ```
+   Otvori `http://localhost:4200`
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Struktura projekta
+src/app/
+├── core/           # Services, guards, interceptors, models
+├── features/       # Feature modules (auth, workouts, progress) components
+├── shared/         # Shared components (navbar)
+└── app.routes.ts   # Routing configuration
 
-## Running unit tests
+## Backend
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+Backend je razvijen u .NET. Za pokretanje backend-a pogledaj backend repository: https://github.com/timko7/WorkoutTracker.
 
-```bash
-ng test
-```
 
-## Running end-to-end tests
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
 
 ## Additional Resources
 
